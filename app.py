@@ -54,4 +54,4 @@ if question:
     answer = chain({'query':question},return_only_outputs=True)
 
     st.header('Answer: ')
-    st.subheader(answer['result])
+    st.subheader(answer['result'])
