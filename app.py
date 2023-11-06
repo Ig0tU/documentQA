@@ -18,7 +18,7 @@ st.subheader('''
 This app is a document chat bot that allows you to chat with online articles or documents.
 
 How to use:\n
-Put three URLs you want to chat with in the designated places and click on "Digest documents".
+Put URLs you want to chat with in the designated places and click on "Digest documents".
 Once the preprocessing is complete, you can start chatting with the documents.
 Put your question or query in the question section and press Enter.''')
 
