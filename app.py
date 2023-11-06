@@ -12,11 +12,9 @@ from langchain.vectorstores import FAISS
 
 llm = GooglePalm(google_api_key=st.secrets["api_key"], temperature=0.5)
 
-
 st.title('Internet Documents Research Tool')
 st.sidebar.title('Please put the URLs you want to chat with here:')
 st.image('cover.jpg')
-#st.subheader(' ')
 
 urls = []
 
@@ -29,29 +27,31 @@ button = st.sidebar.button('Digest documents!')
 mainPlace = st.empty()
 
 if button:    
-    mainPlace.text('Digesting the Documents...')
+    mainPlace.subheader('Digesting the Documents...')
     loader = UnstructuredURLLoader(urls)
     data = loader.load()
     
     splitter = RecursiveCharacterTextSplitter(
-        separators=['\n\n','\n','.',','],
+        separators=['\n\n','\n',',','.'],
         chunk_size=1000,
         chunk_overlap=200
-)
+      )     
+
     docs = splitter.split_documents(data)
     
-    mainPlace.text('Embedding and Creating Vector Database...')
+    mainPlace.subheader('Embedding and Creating Vector Database...')
     embeddings = GooglePalmEmbeddings(google_api_key=st.secrets["api_key"])
     vectorindex_googlepalm = FAISS.from_documents(docs, embeddings)
-    chain = RetrievalQA.from_llm(llm=llm, retriever=vectorindex_googlepalm.as_retriever())
-    
-    mainPlace.text('Vector Database Created.')
+    vectorindex_googlepalm.save_local('vectordatabase')
+    mainPlace.subheader('Vector Database Created.')
     
 
-question = mainPlace.text_input('Please type your question here: ')   
+question = mainPlace.text_input('##### Now! Please type your prompt (question) here to find the answer in the documents: \n For example: what will the price of gold in 2024? please explain ')   
 
 if question:
+    embeddings = GooglePalmEmbeddings(google_api_key=st.secrets["api_key"])
+    vectorindex_googlepalm = FAISS.load_local('vectordatabase',embeddings)
+    chain = RetrievalQA.from_llm(llm=llm, retriever=vectorindex_googlepalm.as_retriever())
     answer = chain({'query':question},return_only_outputs=True)
-
     st.header('Answer: ')
-    st.subheader(answer['result'])
+    st.write(answer['result'])
