@@ -17,7 +17,7 @@ st.title('Internet Documents Research Tool')
 st.subheader('''
 This app is a document chat bot that allows you to chat with online articles or documents.
 
-How to use: 
+How to use:\n
 Put three URLs you want to chat with in the designated places and click on "Digest documents".
 Once the preprocessing is complete, you can start chatting with the documents.
 Put your question or query in the question section and press Enter.''')
@@ -55,7 +55,7 @@ if button:
     mainPlace.subheader('Vector Database Created.')
     
 
-question = mainPlace.text_input('##### Now! Please type your prompt (question) here to find the answer in the documents: \n For example: what will the price of gold in 2024? please explain ')   
+question = mainPlace.text_input('##### Please type your prompt (question) here to find the answer in the documents: \n For example: what will the price of gold in 2024? please explain ')   
 
 if question:
     embeddings = GooglePalmEmbeddings(google_api_key=st.secrets["api_key"])
